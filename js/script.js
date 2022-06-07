@@ -1,11 +1,12 @@
-let menu = [{ id: 1, nombre: 'Pizza', precio: 20, stock: '3' },
-{ id: 2, nombre: 'Pancho', precio: 3, stock: '7' },
-{ id: 3, nombre: 'Hamburguesa', precio: 15, stock: '0' }];
+let menu = [{ id: 1, nombre: 'Pizza', precio: 20, stock: '3', cantidad: 0 },
+{ id: 2, nombre: 'Pancho', precio: 3, stock: '7', cantidad: 0 },
+{ id: 3, nombre: 'Hamburguesa', precio: 15, stock: '0', cantidad: 0 }];
 alert("Hola, bienvenido al restaurante");
 function CalcPrecio(id) {
     if (menu[id].stock > 0) {
         precio += menu[id].precio;
         menu[id].stock--;
+        menu[id].cantidad++;
         alert("su pedido de " + menu[id].nombre + " ha sido agregado al carrito");
         return precio;
     }
@@ -40,7 +41,6 @@ do{
     if (opcion == 3) {
         if (precio > 0) {
             alert('Su pedido es un total de: $' + precio);
-            precio = 0;
             break;
         } else {
             alert('No tiene nada en su pedido');
@@ -51,4 +51,14 @@ do{
     }
 }while (opcion != 4); {
     alert("Adios");
+}
+
+let nuevodiv = document.createElement('div');
+nuevodiv.innerHTML = '<h1>El contenido de su carrito es</h1><h3>el total es '+ precio +'<\h3><ol id="menu"></ol>';
+document.body.appendChild(nuevodiv);
+
+for (comida in menu) {
+    let nuevoitem = document.createElement('li');
+    nuevoitem.innerHTML = menu[comida].cantidad + ' ' + menu[comida].nombre;
+    document.getElementById('menu').appendChild(nuevoitem);
 }
