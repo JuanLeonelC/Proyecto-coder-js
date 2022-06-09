@@ -1,7 +1,6 @@
 let menu = [{ id: 1, nombre: 'Pizza', precio: 20, stock: '3', cantidad: 0 },
 { id: 2, nombre: 'Pancho', precio: 3, stock: '7', cantidad: 0 },
 { id: 3, nombre: 'Hamburguesa', precio: 15, stock: '0', cantidad: 0 }];
-alert("Hola, bienvenido al restaurante");
 function CalcPrecio(id) {
     if (menu[id].stock > 0) {
         precio += menu[id].precio;
@@ -10,14 +9,15 @@ function CalcPrecio(id) {
         alert("su pedido de " + menu[id].nombre + " ha sido agregado al carrito");
         return precio;
     }
-    else{
+    else {
         alert("No hay mas stock");
-    }    
+    }
 
 }
 let precio = 0;
 let opcion
-do{
+
+do {
     let opcion = prompt('que desea hacer\n 1. Ver menu\n 2. pedir comida\n 3. retirar su comida\n 4. Salir');
     if (opcion == 1) {
         alert('El menu es:');
@@ -26,15 +26,15 @@ do{
         }
     }
     if (opcion == 2) {
-        let pedir = prompt('Que desea pedir?\n' + 
-            menu[0].id + '- ' +menu[0].nombre + ' vale ' + menu[0].precio + ' tenemos ' + menu[0].stock + "\n" +
+        let pedir = prompt('Que desea pedir?\n' +
+            menu[0].id + '- ' + menu[0].nombre + ' vale ' + menu[0].precio + ' tenemos ' + menu[0].stock + "\n" +
             menu[1].id + '- ' + menu[1].nombre + ' vale ' + menu[1].precio + ' tenemos ' + menu[1].stock + "\n" +
             menu[2].id + '- ' + menu[2].nombre + ' vale ' + menu[2].precio + ' tenemos ' + menu[2].stock);
         if (pedir > 0 && pedir < 4) {
             pedir -= 1;
             CalcPrecio(pedir);
         }
-        else{
+        else {
             alert('No existe esa opcion');
         }
     }
@@ -49,16 +49,23 @@ do{
     if (opcion == 4) {
         break;
     }
-}while (opcion != 4); {
+} while (opcion != 4); {
     alert("Adios");
 }
 
 let nuevodiv = document.createElement('div');
-nuevodiv.innerHTML = '<h1>El contenido de su carrito es</h1><h3>el total es '+ precio +'<\h3><ol id="menu"></ol>';
+nuevodiv.innerHTML = '<h1>El contenido de su carrito es</h1><h3>el total es ' + precio + '<\h3><ol id="menu"></ol>';
 document.body.appendChild(nuevodiv);
 
-for (comida in menu) {
-    let nuevoitem = document.createElement('li');
-    nuevoitem.innerHTML = menu[comida].cantidad + ' ' + menu[comida].nombre;
-    document.getElementById('menu').appendChild(nuevoitem);
-}
+
+let boton = document.createElement("input");
+boton.setAttribute("type", "button");
+boton.setAttribute("value", "Carrito");
+document.body.appendChild(boton);
+boton.addEventListener("click", function () {
+        for (comida in menu) {
+        let nuevoitem = document.createElement('li');
+        nuevoitem.innerHTML = menu[comida].cantidad + ' ' + menu[comida].nombre;
+        document.getElementById('menu').appendChild(nuevoitem);
+        abierto == true;
+    }});
