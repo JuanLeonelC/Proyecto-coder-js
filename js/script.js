@@ -1,71 +1,202 @@
-let menu = [{ id: 1, nombre: 'Pizza', precio: 20, stock: '3', cantidad: 0 },
-{ id: 2, nombre: 'Pancho', precio: 3, stock: '7', cantidad: 0 },
-{ id: 3, nombre: 'Hamburguesa', precio: 15, stock: '0', cantidad: 0 }];
-function CalcPrecio(id) {
-    if (menu[id].stock > 0) {
-        precio += menu[id].precio;
-        menu[id].stock--;
-        menu[id].cantidad++;
-        alert("su pedido de " + menu[id].nombre + " ha sido agregado al carrito");
-        return precio;
-    }
-    else {
-        alert("No hay mas stock");
-    }
+// Clicker game
 
+// configuracion
+let game = { // configuracion del juego
+    score: 0,
+    clickPower: 1,
+    scorePorseg: 0
 }
-let precio = 0;
-let opcion
+let mejoras = [ // configuracion de las mejoras
+    {
+        name: "Pizza",
+        price: 10,
+        baseprice: 10,
+        description: "+1 al score por click",
+        cantidad: 0,
+        img: "assets/pizza.webp",
+        mejora: 1,
+        mejoraPorSeg: 0
+    },
+    {
+        name: "Pancho",
+        price: 100,
+        baseprice: 100,
+        description: "+5 al score por click",
+        cantidad: 0,
+        img: "assets/pancho.webp",
+        mejora: 5,
+        mejoraPorSeg: 1
+    },
+    {
+        name: "Galleta",
+        price: 500,
+        baseprice: 500,
+        description: "+10 al score por click",
+        cantidad: 0,
+        img: "assets/galleta.jpg",
+        mejora: 5,
+        mejoraPorSeg: 25
+    }
+]
+let desbloqueables = [ // configuracion de los desbloqueables
+    {
+        name: "Boost",
+        price: 1000,
+        description: "Aumenta el score por segundo",
+        unlocked: false,
+        requirement: 10,
+        img : "assets/galleta.jpg"
+    },
+    {
+        name: "Boost",
+        price: 1000,
+        description: "Aumenta el score por segundo",
+        unlocked: false,
+        requirement: 10,
+        img : "assets/galleta.jpg"
+    },
+    {
+        name: "Boost",
+        price: 1000,
+        description: "Aumenta el score por segundo",
+        unlocked: false,
+        requirement: 10,
+        img : "assets/galleta.jpg"
+    },
+    {
+        name: "Boost",
+        price: 1000,
+        description: "Aumenta el score por segundo",
+        unlocked: false,
+        requirement: 10,
+        img : "assets/galleta.jpg"
+    },
+    {
+        name: "Boost",
+        price: 1000,
+        description: "Aumenta el score por segundo",
+        unlocked: false,
+        requirement: 10,
+        img : "assets/galleta.jpg"
+    },
+]
 
-do {
-    let opcion = prompt('que desea hacer\n 1. Ver menu\n 2. pedir comida\n 3. retirar su comida\n 4. Salir');
-    if (opcion == 1) {
-        alert('El menu es:');
-        for (comida in menu) {
-            alert(menu[comida].nombre + ' ' + menu[comida].precio + ' ' + menu[comida].stock);
-        }
+// funciones del juego
+function comprar(index) {  // maneja el sistema de comprar mejoras
+    if (game.score >= mejoras[index].price) {
+        game.score -= mejoras[index].price;
+        mejoras[index].cantidad++;
+        mejoras[index].price = Math.round(mejoras[index].price * 1.15);
+        game.clickPower += mejoras[index].mejora;
+        game.scorePorseg += mejoras[index].mejoraPorSeg;
+        display.actualizarcompras(index);
+        display.actualizar();
     }
-    if (opcion == 2) {
-        let pedir = prompt('Que desea pedir?\n' +
-            menu[0].id + '- ' + menu[0].nombre + ' vale ' + menu[0].precio + ' tenemos ' + menu[0].stock + "\n" +
-            menu[1].id + '- ' + menu[1].nombre + ' vale ' + menu[1].precio + ' tenemos ' + menu[1].stock + "\n" +
-            menu[2].id + '- ' + menu[2].nombre + ' vale ' + menu[2].precio + ' tenemos ' + menu[2].stock);
-        if (pedir > 0 && pedir < 4) {
-            pedir -= 1;
-            CalcPrecio(pedir);
-        }
-        else {
-            alert('No existe esa opcion');
-        }
-    }
-    if (opcion == 3) {
-        if (precio > 0) {
-            alert('Su pedido es un total de: $' + precio);
-            break;
-        } else {
-            alert('No tiene nada en su pedido');
-        }
-    }
-    if (opcion == 4) {
-        break;
-    }
-} while (opcion != 4); {
-    alert("Adios");
 }
 
-let nuevodiv = document.createElement('div');
-nuevodiv.innerHTML = '<h1>El contenido de su carrito es</h1><h3>el total es ' + precio + '<\h3><ol id="menu"></ol>';
-document.body.appendChild(nuevodiv);
+let display = {  // actualiza el display del juego
+    actualizar: function() {
+        document.getElementById("score").innerHTML = game.score;
+        document.getElementById("clickPower").innerHTML = "+" + game.clickPower;
+        document.getElementById("scorePorseg").innerHTML = "+" + game.scorePorseg;
+},
+    actualizarcompras(index) {
+    document.getElementById("mejora" + index).innerHTML = "<img src=" + mejoras[index].img + "><div><span class = 'titulo'>" + mejoras[index].name + "</span><span>vale " + mejoras[index].price + "</span><span>" + mejoras[index].description + "</span><span>tienes " + mejoras[index].cantidad + "</span></div>";
+},
+    actualizartienda()  {
+        for (let i = 0; i < mejoras.length; i++) {
+            document.getElementById("mejora" + i).innerHTML = "<img src=" + mejoras[i].img + "><div><span class = 'titulo'>" + mejoras[i].name + "</span><span>vale " + mejoras[i].price + "</span><span>" + mejoras[i].description + "</span><span>tienes " + mejoras[i].cantidad + "</span></div>";
+        }
+}
+}
 
+function reiniciar() { // reinicia el juego
+    game.score = 0;
+    game.clickPower = 1;
+    game.scorePorseg = 0;
+    for (let i = 0; i < mejoras.length; i++) {
+        mejoras[i].cantidad = 0;
+        mejoras[i].price = mejoras[i].baseprice;
+    }
+    display.actualizar();
+    display.actualizartienda();
+}
 
-let boton = document.createElement("input");
-boton.setAttribute("type", "button");
-boton.setAttribute("value", "Carrito");
-document.body.appendChild(boton);
-boton.addEventListener("click", function () {
-        for (comida in menu) {
-        let nuevoitem = document.createElement('li');
-        nuevoitem.innerHTML = menu[comida].cantidad + ' ' + menu[comida].nombre;
-        document.getElementById('menu').appendChild(nuevoitem);
-        abierto == true;
-    }});
+function guardarpartida(){ // guarda la partida
+    var guardar = {
+        score: game.score,
+        clickPower: game.clickPower,
+        scorePorseg: game.scorePorseg,
+        mejoras: mejoras
+    }
+    localStorage.setItem("partida", JSON.stringify(guardar));
+}
+
+function cargarpartida(){ // carga la partida
+    var cargar = JSON.parse(localStorage.getItem("partida"));
+    if(cargar != null){
+        if (typeof cargar.score != "undefined") game.score = cargar.score;
+        if (typeof cargar.clickPower != "undefined") game.clickPower = cargar.clickPower;
+        if (typeof cargar.scorePorseg != "undefined") game.scorePorseg = cargar.scorePorseg;
+        if (typeof cargar.mejoras != "undefined"){
+            for(let i = 0; i < mejoras.length; i++){
+                if(typeof cargar.mejoras[i].cantidad != "undefined") mejoras[i].cantidad = cargar.mejoras[i].cantidad;
+                if(typeof cargar.mejoras[i].price != "undefined") mejoras[i].price = cargar.mejoras[i].price;
+    }}}
+}
+setInterval(function() { // suma los puntos por segundo a la puntuacion
+    game.score += game.scorePorseg;
+    display.actualizar();
+}, 1000);
+
+setInterval(function() { // guarda la partida cada 30
+    guardarpartida()
+}, 30000);
+
+window.onload = function() { // carga la partida
+    cargarpartida();
+    display.actualizar();
+    display.actualizartienda();
+}
+// interfaz del juego
+let boton = document.getElementById("click"); // boton para sumar puntos
+boton.addEventListener("click", function() {
+    game.score += game.clickPower;
+    display.actualizar();
+}
+);
+
+// en proceso
+// let desbloqueable = document.getElementById("desbloqueables"); // menu de desbloqueables
+// for (desbloqueo in desbloqueables){
+//    let nuevodesbloqueo = document.createElement("div");
+//    document.createAttribute("id");
+//    nuevodesbloqueo.setAttribute("id", "desbloqueo" + desbloqueo);
+//    document.createAttribute("onclick");
+//    nuevodesbloqueo.setAttribute("onclick", "desbloquear(" + desbloqueo + ")");
+//    nuevodesbloqueo.innerHTML = "<img class='disabled' src=" + desbloqueables[desbloqueo].img + ">"
+//    desbloqueable.appendChild(nuevodesbloqueo);
+//}
+
+let menu = document.getElementById("menu"); // menu de mejoras
+for (item in mejoras) {
+    let nuevoitem = document.createElement('div');
+    document.createAttribute("id")
+    document.createAttribute("onclick");
+    nuevoitem.setAttribute("id", "mejora" + item);
+    nuevoitem.setAttribute("onclick", "comprar(" + item + ")");
+    nuevoitem.innerHTML = "<img src=" + mejoras[item].img + "><div><span class = 'titulo'>" + mejoras[item].name + "</span><span>vale " + mejoras[item].price + "</span><span>" + mejoras[item].description + "</span><span>tienes " + mejoras[item].cantidad + "</span></div>";
+    menu.appendChild(nuevoitem);
+}
+
+let guardar = document.getElementById("partida"); // boton para guardar la partida
+guardar.addEventListener("click", function() {
+    guardarpartida();
+}
+);
+
+let reinicio = document.getElementById("reiniciar"); // boton para reiniciar el juego
+reinicio.addEventListener("click", function() {
+    reiniciar();
+}
+);
