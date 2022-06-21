@@ -28,57 +28,35 @@ let mejoras = [ // configuracion de las mejoras
         mejoraPorSeg: 1
     },
     {
-        name: "Galleta",
+        name: "hamburguesa",
         price: 500,
         baseprice: 500,
         description: "+10 al score por click",
         cantidad: 0,
+        img: "assets/hamburguesa.webp",
+        mejora: 20,
+        mejoraPorSeg: 5
+    },
+    {
+        name: "Galleta",
+        price: 2000,
+        baseprice: 2000,
+        description: "+50 al score por click",
+        cantidad: 0,
         img: "assets/galleta.jpg",
-        mejora: 5,
-        mejoraPorSeg: 25
+        mejora: 50,
+        mejoraPorSeg: 20
+    },
+    {
+        name: "Galleta",
+        price: 1000000,
+        baseprice: 1000000,
+        description: "es imposible",
+        cantidad: 0,
+        img: "assets/galleta.jpg",
+        mejora: 5000,
+        mejoraPorSeg: 5000
     }
-]
-let desbloqueables = [ // configuracion de los desbloqueables
-    {
-        name: "Boost",
-        price: 1000,
-        description: "Aumenta el score por segundo",
-        unlocked: false,
-        requirement: 10,
-        img : "assets/galleta.jpg"
-    },
-    {
-        name: "Boost",
-        price: 1000,
-        description: "Aumenta el score por segundo",
-        unlocked: false,
-        requirement: 10,
-        img : "assets/galleta.jpg"
-    },
-    {
-        name: "Boost",
-        price: 1000,
-        description: "Aumenta el score por segundo",
-        unlocked: false,
-        requirement: 10,
-        img : "assets/galleta.jpg"
-    },
-    {
-        name: "Boost",
-        price: 1000,
-        description: "Aumenta el score por segundo",
-        unlocked: false,
-        requirement: 10,
-        img : "assets/galleta.jpg"
-    },
-    {
-        name: "Boost",
-        price: 1000,
-        description: "Aumenta el score por segundo",
-        unlocked: false,
-        requirement: 10,
-        img : "assets/galleta.jpg"
-    },
 ]
 
 // funciones del juego
@@ -165,18 +143,6 @@ boton.addEventListener("click", function() {
     display.actualizar();
 }
 );
-
-// en proceso
-// let desbloqueable = document.getElementById("desbloqueables"); // menu de desbloqueables
-// for (desbloqueo in desbloqueables){
-//    let nuevodesbloqueo = document.createElement("div");
-//    document.createAttribute("id");
-//    nuevodesbloqueo.setAttribute("id", "desbloqueo" + desbloqueo);
-//    document.createAttribute("onclick");
-//    nuevodesbloqueo.setAttribute("onclick", "desbloquear(" + desbloqueo + ")");
-//    nuevodesbloqueo.innerHTML = "<img class='disabled' src=" + desbloqueables[desbloqueo].img + ">"
-//    desbloqueable.appendChild(nuevodesbloqueo);
-//}
 
 let menu = document.getElementById("menu"); // menu de mejoras
 for (item in mejoras) {

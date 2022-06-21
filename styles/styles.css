@@ -4,6 +4,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
+    user-select: none;
 }
 :root{
     --color-header: #575366;
@@ -20,7 +21,7 @@ header{
     background-color: var(--color-header);
     color: var(--color-text);
     text-align: center;
-    height: 20%;
+    height: 15%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,7 +41,7 @@ header{
 /* cuerpo de la pagina */
 
 main{
-    height: 80%;
+    height: 85%;
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
@@ -94,8 +95,7 @@ main{
     cursor: pointer;
     text-align: left;
     display: flex;
-    justify-content: left;
-    gap: 10rem;
+    gap: 3rem;
     margin: 1rem;
     border: 10px solid var(--color-extra);
 }
@@ -111,33 +111,7 @@ main{
 
 #menu div div{
     display: grid;
-    grid-template-columns: 1fr 0.5fr;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem 5rem;
     border: 0;
 }
-
-/* en proceso */
-
-/*
-#desbloqueables{
-    display:flex;
-    flex-flow: row;
-    flex-wrap: wrap;
-    width: 100%;
-}
-#desbloqueables div{
-    height: 80px;
-    border: 0.5rem solid var(--color-extra);
-    border-style: ridge;
-    margin: 1px 2px;
-}
-
-#desbloqueables div img{
-    height: 100%;
-    aspect-ratio: 1/1;
-}
-
-.disabled{
-    opacity: 0.7;
-}
-*/
