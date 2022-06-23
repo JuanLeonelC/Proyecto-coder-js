@@ -1,6 +1,8 @@
 // Clicker game
 
 // configuracion
+let start
+var DateTime = luxon.DateTime;
 let game = { // configuracion del juego
     score: 0,
     clickPower: 1,
@@ -9,7 +11,7 @@ let game = { // configuracion del juego
 let mejoras = [ // configuracion de las mejoras
     {
         name: "Pizza",
-        price: 10,
+        price: 5,
         baseprice: 10,
         description: "+1 al score por click",
         cantidad: 0,
@@ -48,10 +50,10 @@ let mejoras = [ // configuracion de las mejoras
         mejoraPorSeg: 20
     },
     {
-        name: "Galleta",
+        name: "Galleta suprema",
         price: 1000000,
         baseprice: 1000000,
-        description: "es imposible",
+        description: "es imposible de conseguir",
         cantidad: 0,
         img: "assets/galleta.jpg",
         mejora: 5000,
@@ -60,17 +62,6 @@ let mejoras = [ // configuracion de las mejoras
 ]
 
 // funciones del juego
-function comprar(index) {  // maneja el sistema de comprar mejoras
-    if (game.score >= mejoras[index].price) {
-        game.score -= mejoras[index].price;
-        mejoras[index].cantidad++;
-        mejoras[index].price = Math.round(mejoras[index].price * 1.15);
-        game.clickPower += mejoras[index].mejora;
-        game.scorePorseg += mejoras[index].mejoraPorSeg;
-        display.actualizarcompras(index);
-        display.actualizar();
-    }
-}
 
 let display = {  // actualiza el display del juego
     actualizar: function() {
@@ -88,6 +79,43 @@ let display = {  // actualiza el display del juego
 }
 }
 
+function comprar(index) {  // maneja el sistema de comprar mejoras
+    if (game.score >= mejoras[index].price) {
+        game.score -= mejoras[index].price;
+        mejoras[index].cantidad++;
+        mejoras[index].price = Math.round(mejoras[index].price * 1.15);
+        game.clickPower += mejoras[index].mejora;
+        game.scorePorseg += mejoras[index].mejoraPorSeg;
+        display.actualizarcompras(index);
+        display.actualizar();
+    }
+}
+
+function contartiempo() {
+    let end = DateTime.now();
+    start = DateTime.fromISO(start);
+    var diffInSeconds = end.diff(start, 'seconds');
+    diffInSeconds.toObject();
+    diferencia = diffInSeconds.seconds
+    if (diferencia <= 120){
+        puntos = diferencia * game.scorePorseg
+        Math.round(puntos / 2)
+        if (puntos >= 1){
+            notificacion(Math.round(puntos / 2))
+        }
+    }
+    game.score += Math.round(puntos / 2)
+}
+
+function notificacion(puntos) {
+    Toastify({
+        text: "ganaste " + puntos + " puntos mientras no estabas",
+        style: {
+          background: "linear-gradient(90deg, rgba(0,212,255,1) 0%, rgba(9,9,121,1) 68%, rgba(2,0,36,1) 99%)",
+        }
+      }).showToast();
+}
+
 function reiniciar() { // reinicia el juego
     game.score = 0;
     game.clickPower = 1;
@@ -101,11 +129,13 @@ function reiniciar() { // reinicia el juego
 }
 
 function guardarpartida(){ // guarda la partida
+    var ahora = DateTime.now();
     var guardar = {
         score: game.score,
         clickPower: game.clickPower,
         scorePorseg: game.scorePorseg,
-        mejoras: mejoras
+        mejoras: mejoras,
+        tiempo: ahora
     }
     localStorage.setItem("partida", JSON.stringify(guardar));
 }
@@ -116,11 +146,13 @@ function cargarpartida(){ // carga la partida
         if (typeof cargar.score != "undefined") game.score = cargar.score;
         if (typeof cargar.clickPower != "undefined") game.clickPower = cargar.clickPower;
         if (typeof cargar.scorePorseg != "undefined") game.scorePorseg = cargar.scorePorseg;
+        if (typeof cargar.tiempo != "undefined") start = cargar.tiempo;
         if (typeof cargar.mejoras != "undefined"){
             for(let i = 0; i < mejoras.length; i++){
                 if(typeof cargar.mejoras[i].cantidad != "undefined") mejoras[i].cantidad = cargar.mejoras[i].cantidad;
                 if(typeof cargar.mejoras[i].price != "undefined") mejoras[i].price = cargar.mejoras[i].price;
     }}}
+    contartiempo()
 }
 setInterval(function() { // suma los puntos por segundo a la puntuacion
     game.score += game.scorePorseg;
