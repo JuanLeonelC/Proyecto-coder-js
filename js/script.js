@@ -1,200 +1,159 @@
 // Clicker game
-
 // configuracion
 let start
 var DateTime = luxon.DateTime;
 let game = { // configuracion del juego
     score: 0,
     clickPower: 1,
-    scorePorseg: 0
+    scorePerSecond: 0
 }
-let mejoras = [ // configuracion de las mejoras
-    {
-        name: "Pizza",
-        price: 5,
-        baseprice: 10,
-        description: "+1 al score por click",
-        cantidad: 0,
-        img: "assets/pizza.webp",
-        mejora: 1,
-        mejoraPorSeg: 0
-    },
-    {
-        name: "Pancho",
-        price: 100,
-        baseprice: 100,
-        description: "+5 al score por click",
-        cantidad: 0,
-        img: "assets/pancho.webp",
-        mejora: 5,
-        mejoraPorSeg: 1
-    },
-    {
-        name: "hamburguesa",
-        price: 500,
-        baseprice: 500,
-        description: "+10 al score por click",
-        cantidad: 0,
-        img: "assets/hamburguesa.webp",
-        mejora: 20,
-        mejoraPorSeg: 5
-    },
-    {
-        name: "Galleta",
-        price: 2000,
-        baseprice: 2000,
-        description: "+50 al score por click",
-        cantidad: 0,
-        img: "assets/galleta.jpg",
-        mejora: 50,
-        mejoraPorSeg: 20
-    },
-    {
-        name: "Galleta suprema",
-        price: 1000000,
-        baseprice: 1000000,
-        description: "es imposible de conseguir",
-        cantidad: 0,
-        img: "assets/galleta.jpg",
-        mejora: 5000,
-        mejoraPorSeg: 5000
-    }
-]
-
 // funciones del juego
 
 let display = {  // actualiza el display del juego
-    actualizar: function() {
+    update() {
         document.getElementById("score").innerHTML = game.score;
         document.getElementById("clickPower").innerHTML = "+" + game.clickPower;
-        document.getElementById("scorePorseg").innerHTML = "+" + game.scorePorseg;
+        document.getElementById("scorePerSecond").innerHTML = "+" + game.scorePerSecond;
 },
-    actualizarcompras(index) {
-    document.getElementById("mejora" + index).innerHTML = "<img src=" + mejoras[index].img + "><div><span class = 'titulo'>" + mejoras[index].name + "</span><span>vale " + mejoras[index].price + "</span><span>" + mejoras[index].description + "</span><span>tienes " + mejoras[index].cantidad + "</span></div>";
+    updateBuys(index) {
+    document.getElementById("upgrade" + index).innerHTML = "<img src=" + upgrades[index].img + "><div><span class = 'titulo'>" + upgrades[index].name + "</span><span>vale " + upgrades[index].price + "</span><span>" + upgrades[index].description + "</span><span>tienes " + upgrades[index].quantity + "</span></div>";
 },
-    actualizartienda()  {
-        for (let i = 0; i < mejoras.length; i++) {
-            document.getElementById("mejora" + i).innerHTML = "<img src=" + mejoras[i].img + "><div><span class = 'titulo'>" + mejoras[i].name + "</span><span>vale " + mejoras[i].price + "</span><span>" + mejoras[i].description + "</span><span>tienes " + mejoras[i].cantidad + "</span></div>";
+    updateShop()  {
+        for (let i = 0; i < upgrades.length; i++) {
+            document.getElementById("upgrade" + i).innerHTML = "<img src=" + upgrades[i].img + "><div><span class = 'titulo'>" + upgrades[i].name + "</span><span>vale " + upgrades[i].price + "</span><span>" + upgrades[i].description + "</span><span>tienes " + upgrades[i].quantity + "</span></div>";
         }
 }
 }
+async function requestUpgrades(){
+    const response = await fetch("js/module/upgrades.json");
+    const data = await response.json();
+    upgrades = data;
+    createUpgrades();
+}requestUpgrades();
 
-function comprar(index) {  // maneja el sistema de comprar mejoras
-    if (game.score >= mejoras[index].price) {
-        game.score -= mejoras[index].price;
-        mejoras[index].cantidad++;
-        mejoras[index].price = Math.round(mejoras[index].price * 1.15);
-        game.clickPower += mejoras[index].mejora;
-        game.scorePorseg += mejoras[index].mejoraPorSeg;
-        display.actualizarcompras(index);
-        display.actualizar();
+function createUpgrades(){ // crea los upgrades
+    for (item in upgrades) {
+        let newItem = document.createElement('div');
+        document.createAttribute("id")
+        document.createAttribute("onclick");
+        newItem.setAttribute("id", "upgrade" + item);
+        newItem.setAttribute("onclick", "buy(" + item + ")");
+        newItem.innerHTML = "<img src=" + upgrades[item].img + "><div><span class = 'titulo'>" + upgrades[item].name + "</span><span>vale " + upgrades[item].price + "</span><span>" + upgrades[item].description + "</span><span>tienes " + upgrades[item].quantity + "</span></div>";
+        menu.appendChild(newItem);
     }
 }
 
-function contartiempo() {
+function buy(index) {  // maneja el sistema de buy upgrades
+    if (game.score >= upgrades[index].price) {
+        game.score -= upgrades[index].price;
+        upgrades[index].quantity++;
+        upgrades[index].price = Math.round(upgrades[index].price * 1.15);
+        game.clickPower += upgrades[index].upgrade;
+        game.scorePerSecond += upgrades[index].upgradePerSecond;
+        display.updateBuys(index);
+        display.update();
+    }
+}
+
+function offlineTime() {
     let end = DateTime.now();
     start = DateTime.fromISO(start);
     var diffInSeconds = end.diff(start, 'seconds');
     diffInSeconds.toObject();
-    diferencia = diffInSeconds.seconds
-    if (diferencia <= 120){
-        puntos = diferencia * game.scorePorseg
-        Math.round(puntos / 2)
-        if (puntos >= 1){
-            notificacion(Math.round(puntos / 2))
+    difference = diffInSeconds.seconds
+    if (difference <= 120){
+        points = difference * game.scorePerSecond
+        Math.round(points / 2)
+        if (points >= 1){
+            notification(Math.round(points / 2))
+            game.score += Math.round(points / 2)
         }
     }
-    game.score += Math.round(puntos / 2)
+    
 }
 
-function notificacion(puntos) {
+function notification(points) {
     Toastify({
-        text: "ganaste " + puntos + " puntos mientras no estabas",
+        text: "ganaste " + points + " puntos mientras no estabas",
         style: {
           background: "linear-gradient(90deg, rgba(0,212,255,1) 0%, rgba(9,9,121,1) 68%, rgba(2,0,36,1) 99%)",
         }
       }).showToast();
+      display.update();
 }
 
-function reiniciar() { // reinicia el juego
+function restart() { // reinicia el juego
     game.score = 0;
     game.clickPower = 1;
-    game.scorePorseg = 0;
-    for (let i = 0; i < mejoras.length; i++) {
-        mejoras[i].cantidad = 0;
-        mejoras[i].price = mejoras[i].baseprice;
+    game.scorePerSecond = 0;
+    for (let i = 0; i < upgrades.length; i++) {
+        upgrades[i].quantity = 0;
+        upgrades[i].price = upgrades[i].baseprice;
     }
-    display.actualizar();
-    display.actualizartienda();
+    display.update();
+    display.updateShop();
 }
 
-function guardarpartida(){ // guarda la partida
-    var ahora = DateTime.now();
-    var guardar = {
+function saveGame(){ // guarda la partida
+    var now = DateTime.now();
+    var save = {
         score: game.score,
         clickPower: game.clickPower,
-        scorePorseg: game.scorePorseg,
-        mejoras: mejoras,
-        tiempo: ahora
+        scorePerSecond: game.scorePerSecond,
+        upgrades: upgrades,
+        tiempo: now
     }
-    localStorage.setItem("partida", JSON.stringify(guardar));
+    localStorage.setItem("game", JSON.stringify(save));
 }
 
-function cargarpartida(){ // carga la partida
-    var cargar = JSON.parse(localStorage.getItem("partida"));
-    if(cargar != null){
-        if (typeof cargar.score != "undefined") game.score = cargar.score;
-        if (typeof cargar.clickPower != "undefined") game.clickPower = cargar.clickPower;
-        if (typeof cargar.scorePorseg != "undefined") game.scorePorseg = cargar.scorePorseg;
-        if (typeof cargar.tiempo != "undefined") start = cargar.tiempo;
-        if (typeof cargar.mejoras != "undefined"){
-            for(let i = 0; i < mejoras.length; i++){
-                if(typeof cargar.mejoras[i].cantidad != "undefined") mejoras[i].cantidad = cargar.mejoras[i].cantidad;
-                if(typeof cargar.mejoras[i].price != "undefined") mejoras[i].price = cargar.mejoras[i].price;
+function loadGame(){ // carga la partida
+    var load = JSON.parse(localStorage.getItem("game"));
+    if(load != null){
+        if (typeof load.score != "undefined") game.score = load.score;
+        if (typeof load.clickPower != "undefined") game.clickPower = load.clickPower;
+        if (typeof load.scorePerSecond != "undefined") game.scorePerSecond = load.scorePerSecond;
+        if (typeof load.tiempo != "undefined") start = load.tiempo;
+        if (typeof load.upgrades != "undefined"){
+            for(let i = 0; i < upgrades.length; i++){
+                if(typeof load.upgrades[i].quantity != "undefined") upgrades[i].quantity = load.upgrades[i].quantity;
+                if(typeof load.upgrades[i].price != "undefined") upgrades[i].price = load.upgrades[i].price;
     }}}
-    contartiempo()
+    offlineTime()
 }
 setInterval(function() { // suma los puntos por segundo a la puntuacion
-    game.score += game.scorePorseg;
-    display.actualizar();
+    game.score += game.scorePerSecond;
+    display.update();
 }, 1000);
 
 setInterval(function() { // guarda la partida cada 30
-    guardarpartida()
+    saveGame()
 }, 30000);
 
 window.onload = function() { // carga la partida
-    cargarpartida();
-    display.actualizar();
-    display.actualizartienda();
+    loadGame();
+    display.update();
+    display.updateShop();
 }
 // interfaz del juego
-let boton = document.getElementById("click"); // boton para sumar puntos
-boton.addEventListener("click", function() {
+let button = document.getElementById("click"); // button para sumar puntos
+button.addEventListener("click", function() {
     game.score += game.clickPower;
-    display.actualizar();
+    display.update();
 }
 );
 
-let menu = document.getElementById("menu"); // menu de mejoras
-for (item in mejoras) {
-    let nuevoitem = document.createElement('div');
-    document.createAttribute("id")
-    document.createAttribute("onclick");
-    nuevoitem.setAttribute("id", "mejora" + item);
-    nuevoitem.setAttribute("onclick", "comprar(" + item + ")");
-    nuevoitem.innerHTML = "<img src=" + mejoras[item].img + "><div><span class = 'titulo'>" + mejoras[item].name + "</span><span>vale " + mejoras[item].price + "</span><span>" + mejoras[item].description + "</span><span>tienes " + mejoras[item].cantidad + "</span></div>";
-    menu.appendChild(nuevoitem);
-}
+let menu = document.getElementById("menu"); // menu de upgrades
 
-let guardar = document.getElementById("partida"); // boton para guardar la partida
-guardar.addEventListener("click", function() {
-    guardarpartida();
+
+let saveButton = document.getElementById("game"); // button para saveButton la partida
+saveButton.addEventListener("click", function() {
+    saveGame();
 }
 );
 
-let reinicio = document.getElementById("reiniciar"); // boton para reiniciar el juego
-reinicio.addEventListener("click", function() {
-    reiniciar();
+let restartButton = document.getElementById("restart"); // button para restart el juego
+restartButton.addEventListener("click", function() {
+    restart();
 }
 );
+

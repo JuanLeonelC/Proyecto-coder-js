@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clicker Game</title>
+    <script src="js/module/upgrades.json"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon@2.4.0/build/global/luxon.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <link rel="stylesheet" href="styles/styles.css">
@@ -14,18 +15,16 @@
     <div>
         <h2>tienes <span id="score">0</span> puntos</h2>
         <h2>sumas <span id="clickPower">+1</span> por click</h2>
-        <h2>te dan <span id="scorePorseg">+0</span> por segundo</h2>
-        <button id="reiniciar" class="boton">reiniciar partida</button>
-        <button id="partida" class="boton">guardar partida</button>
+        <h2>te dan <span id="scorePerSecond">+0</span> por segundo</h2>
+        <button id="restart" class="button">reiniciar partida</button>
+        <button id="game" class="button">guardar partida</button>
     </div>
 </header>
 <main>
     <div id="clicker" class="clicker">
         <img src="assets/click.webp" id="click">
     </div>
-    <div class="interfaz">
-        <div id="desbloqueables">
-        </div>
+    <div class="interface">
         <div id="menu">
         </div>
         

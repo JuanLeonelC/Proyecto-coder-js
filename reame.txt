@@ -1,0 +1,6 @@
+Cosas por hacer
+- segmentar el js
+- pasar todos los objetos a .json
+- crear un Readme con la informacion del proyecto
+- resolver problemas de sintaxis
+- comentar mas partes del codigo

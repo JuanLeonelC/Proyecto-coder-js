@@ -1,0 +1,52 @@
+[ 
+  {
+    "name": "Pizza",
+    "price": 5,
+    "baseprice": 10,
+    "description": "+1 al score por click",
+    "quantity": 0,
+    "img": "assets/pizza.webp",
+    "upgrade": 1,
+    "upgradePerSecond": 0
+  },
+  {
+    "name": "Pancho",
+    "price": 100,
+    "baseprice": 100,
+    "description": "+5 al score por click",
+    "quantity": 0,
+    "img": "assets/pancho.webp",
+    "upgrade": 5,
+    "upgradePerSecond": 1
+  },
+  {
+    "name": "Hamburguesa",
+    "price": 500,
+    "baseprice": 500,
+    "description": "+20 al score por click",
+    "quantity": 0,
+    "img": "assets/hamburguesa.webp",
+    "upgrade": 20,
+    "upgradePerSecond": 5
+  },
+  {
+    "name": "Galleta",
+    "price": 2000,
+    "baseprice": 2000,
+    "description": "+50 al score por click",
+    "quantity": 0,
+    "img": "assets/galleta.jpg",
+    "upgrade": 50,
+    "upgradePerSecond": 20
+  },
+  {
+    "name": "Galleta suprema",
+    "price": 1000000,
+    "baseprice": 1000000,
+    "description": "es imposible de conseguir",
+    "quantity": 0,
+    "img": "assets/galleta.jpg",
+    "upgrade": 5000,
+    "upgradePerSecond": 5000
+  }
+]

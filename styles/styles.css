@@ -27,7 +27,7 @@ header{
     align-items: center;
 }
 
-.boton{
+.button{
     background-color: var(--color-extra);
     color: var(--color-text);
     border: none;
@@ -76,7 +76,7 @@ main{
 
 /* cuerpo de la interfaz */
 
-.interfaz{
+.interface{
     background-color: var(--color-interfaz);
     color: var(--color-text);
     text-align: center;
