@@ -8,7 +8,7 @@ let game = { // configuracion del juego
     scorePerSecond: 0
 }
 // funciones del juego
-
+let upgrades = requestUpgrades();
 let display = {  // actualiza el display del juego
     update() {
         document.getElementById("score").innerHTML = game.score;
@@ -29,7 +29,8 @@ async function requestUpgrades(){
     const data = await response.json();
     upgrades = data;
     createUpgrades();
-}requestUpgrades();
+    return upgrades;
+}
 
 function createUpgrades(){ // crea los upgrades
     for (item in upgrades) {
@@ -41,6 +42,7 @@ function createUpgrades(){ // crea los upgrades
         newItem.innerHTML = "<img src=" + upgrades[item].img + "><div><span class = 'titulo'>" + upgrades[item].name + "</span><span>vale " + upgrades[item].price + "</span><span>" + upgrades[item].description + "</span><span>tienes " + upgrades[item].quantity + "</span></div>";
         menu.appendChild(newItem);
     }
+    loadGame();
 }
 
 function buy(index) {  // maneja el sistema de buy upgrades
@@ -52,6 +54,7 @@ function buy(index) {  // maneja el sistema de buy upgrades
         game.scorePerSecond += upgrades[index].upgradePerSecond;
         display.updateBuys(index);
         display.update();
+        console.log(upgrades[index]);
     }
 }
 
@@ -108,6 +111,8 @@ function saveGame(){ // guarda la partida
 
 function loadGame(){ // carga la partida
     var load = JSON.parse(localStorage.getItem("game"));
+    console.log(load.upgrades);
+    console.log(upgrades);
     if(load != null){
         if (typeof load.score != "undefined") game.score = load.score;
         if (typeof load.clickPower != "undefined") game.clickPower = load.clickPower;
@@ -116,9 +121,11 @@ function loadGame(){ // carga la partida
         if (typeof load.upgrades != "undefined"){
             for(let i = 0; i < upgrades.length; i++){
                 if(typeof load.upgrades[i].quantity != "undefined") upgrades[i].quantity = load.upgrades[i].quantity;
+                console.log(upgrades[i].quantity);
                 if(typeof load.upgrades[i].price != "undefined") upgrades[i].price = load.upgrades[i].price;
     }}}
     offlineTime()
+    display.updateShop();
 }
 setInterval(function() { // suma los puntos por segundo a la puntuacion
     game.score += game.scorePerSecond;
@@ -130,9 +137,7 @@ setInterval(function() { // guarda la partida cada 30
 }, 30000);
 
 window.onload = function() { // carga la partida
-    loadGame();
     display.update();
-    display.updateShop();
 }
 // interfaz del juego
 let button = document.getElementById("click"); // button para sumar puntos

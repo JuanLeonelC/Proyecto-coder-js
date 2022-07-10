@@ -1,7 +1,7 @@
 [ 
   {
     "name": "Pizza",
-    "price": 5,
+    "price": 10,
     "baseprice": 10,
     "description": "+1 al score por click",
     "quantity": 0,
